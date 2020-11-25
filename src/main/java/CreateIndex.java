@@ -30,36 +30,14 @@ public class CreateIndex {
         IndexWriter iwriter = new IndexWriter(directory, config);
 
         // ArrayList to store documents after parsing
-        ArrayList<Document> documents = getDocuments();
+        //ArrayList<Document> documents = getDocuments();
 
         // Save documents to index
-        iwriter.addDocuments(documents);
+        //iwriter.addDocuments(documents);
 
         // Commit changes and close
         iwriter.close();
         directory.close();
 
-    }
-
-    public static ArrayList<Document> getDocuments() {
-
-        // Path for documents
-        String cranPath = "cran/cran.all.1400";
-
-        // Create array list for parsed documents to be stored to
-        ArrayList<Document> docs = new ArrayList<>();
-
-
-        // Return list of documents
-        return docs;
-    }
-
-    public static Document createDocument() {
-
-        // Create new Lucene document with passed in parameters
-        Document document = new Document();
-
-        // Return Lucene document
-        return document;
     }
 }
