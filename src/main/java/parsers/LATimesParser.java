@@ -28,7 +28,7 @@ public class LATimesParser {
 
         assert fileList != null;
         for (File file : fileList) {
-            org.jsoup.nodes.Document docContent = Jsoup.parse(file,null,"");
+            org.jsoup.nodes.Document docContent = Jsoup.parse(file, null, "");
 
             // Get all documents in file
             Elements documents = docContent.select("DOC");
