@@ -28,30 +28,34 @@ public class LATimesParser {
 
         assert fileList != null;
         for (File file : fileList) {
-            org.jsoup.nodes.Document content = Jsoup.parse(file,null,"");
+            org.jsoup.nodes.Document docContent = Jsoup.parse(file, null, "");
 
-            Elements docs = content.select("DOC");
+            // Get all documents in file
+            Elements documents = docContent.select("DOC");
 
-            for(Element doc: docs) {
-                String docNo, headline, text;
-                docNo = (doc.select("DOCNO").text());
+            // Find ID, Headline, & Content
+            for(Element doc: documents) {
+                String id, headline, content;
+                id = (doc.select("DOCNO").text());
                 headline = (doc.select("HEADLINE").select("P").text());
-                text = (doc.select("TEXT").select("P").text());
-                parsedDocs.add(createDocument(docNo, headline, text));
+                content = (doc.select("TEXT").select("P").text());
+                // Create a Lucene document
+                parsedDocs.add(createDocument(id, headline, content));
             }
 
         }
 
+        // Return final parsed documents
         return parsedDocs;
     }
 
-    public static Document createDocument(String docNo, String headline, String text) {
+    public static Document createDocument(String id, String headline, String content) {
 
         // Create new Lucene document with passed in parameters
         Document document = new Document();
-        document.add(new TextField("DocNum", docNo, Field.Store.YES));
+        document.add(new TextField("DocNumber", id, Field.Store.YES));
         document.add(new TextField("Headline", headline, Field.Store.YES));
-        document.add(new TextField("Content", text, Field.Store.YES));
+        document.add(new TextField("Content", content, Field.Store.YES));
 
         // Return Lucene document
         return document;
