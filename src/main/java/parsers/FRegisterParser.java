@@ -29,7 +29,7 @@ public class FRegisterParser {
                 org.jsoup.nodes.Document document = Jsoup.parse(currentFile, null);
                 Elements docs = document.select("DOC");
                 for (Element currentDoc : docs) {
-                    parsedDocs.add(createDocument(currentDoc.select("DOCNO").text(), currentDoc.select("TEXT").text(), currentDoc.select("DDCTITLE").text()));
+                    parsedDocs.add(createDocument(currentDoc.select("DOCNO").text(), currentDoc.select("TEXT").text(), currentDoc.select("HEADLINE").text()));
                 }
             }
 

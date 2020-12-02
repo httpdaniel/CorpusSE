@@ -68,8 +68,8 @@ public class FTparser {
 	    assert fileList != null;
 	    for (File inputFile: fileList) {
 	    	Document doc = Jsoup.parse(inputFile, "UTF-8");	
-	        Elements textFields = doc.getElementsByTag("Text");
-	        Elements titleFields = doc.getElementsByTag("Headline");
+	        Elements textFields = doc.getElementsByTag("TEXT");
+	        Elements titleFields = doc.getElementsByTag("HEADLINE");
 	        Elements noFields = doc.getElementsByTag("DOCNO");
 	        
 	        DocToIndex docOut = new DocToIndex(textFields, titleFields, noFields);
