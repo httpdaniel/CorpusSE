@@ -1,4 +1,0 @@
-* linguist-vendored
-*.java linguist-vendored=false
-*.java linguist-detectable=true
-*.roff linguist-detectable=false
