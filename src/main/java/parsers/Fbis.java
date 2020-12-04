@@ -26,9 +26,9 @@ public class Fbis {
 	                title = document.select("ti").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
 	                
 	                Document doc = new Document();
-	                doc.add(new TextField("DOCNO", docno, Field.Store.YES));
-	                doc.add(new TextField("HEADLINE", title, Field.Store.YES));
-	                doc.add(new TextField("TEXT", text, Field.Store.YES));
+	                doc.add(new TextField("DocNo", docno, Field.Store.YES));
+	                doc.add(new TextField("Title", title, Field.Store.YES));
+	                doc.add(new TextField("Content", text, Field.Store.YES));
 	                parsedDocuments.add(doc);
 			}
 		}

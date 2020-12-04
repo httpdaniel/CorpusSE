@@ -47,11 +47,15 @@ public class CreateIndex {
         IndexWriter iwriter = new IndexWriter(directory, config);
 
          //ArrayList to store documents after parsing
+        System.out.println("The datasets are being extracted");
         ArrayList<Document> documents = FRegisterParser.getDocuments();
         documents.addAll(Fbis.getDocuments());
         documents.addAll(LATimesParser.getDocuments());
         documents.addAll(Fbis.getDocuments());
+
+
          //Save documents to index
+        System.out.print("The Datasets are being indexed...");
         iwriter.addDocuments(documents);
         iwriter.close();
 
@@ -59,44 +63,24 @@ public class CreateIndex {
         DirectoryReader ireader = DirectoryReader.open(directory);
         IndexSearcher isearcher = new IndexSearcher(ireader);
 
-        String[] content = new String[]{ "TEXT","HEADLINE", "DOCNO"};
+        String[] content = new String[]{ "Content","Title", "DocNo"};
        QueryParser parser = new MultiFieldQueryParser(content, analyzer);
         // Commit changes and close
 
         parser.setAllowLeadingWildcard(true);
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("Corpus/ParsedTopics"));
-        BufferedWriter br = new BufferedWriter(new FileWriter("Corpus/Results"));
+
 
         ArrayList<String> topics = new ArrayList<String>();
-        int j = 1;
+
+        System.out.println("Topics are being extracted...");
         topics = TopicsParser.getDocuments();
 
-        for(String topic: topics){
-            bufferedWriter.write("New Parsed Topic ----------------------------- *");
-            bufferedWriter.newLine();
-            bufferedWriter.write(topic);
-            bufferedWriter.newLine();
-            bufferedWriter.write("End of Topic ============================ *");
-            bufferedWriter.newLine();
+        System.out.println("Index search is starting now");
+        CorpusSearch.search(topics, parser, isearcher);
 
-            System.out.print(j);
-            Query query = parser.parse(QueryParserBase.escape(topic));
-            TopDocs results = isearcher.search(query, 30);
-            ScoreDoc[] hits = results.scoreDocs;
 
-                for (int i = 0; i < hits.length; i++) {
-                        org.apache.lucene.document.Document hitDoc = isearcher.doc(hits[i].doc);
-                        System.out.print(j + " Q0 " + hitDoc.get("DOCNO") + " " + (i + 1) + " " + hits[i].score + " Standard" + "\n");
-                        br.write(j + " Q0 " + hitDoc.get("DOCNO") + " " + (i + 1) + " " + hits[i].score + " Standard" + "\n");
-                }
-            j++;
-        }
-
-        bufferedWriter.flush();
-        br.flush();
-        br.close();
-        bufferedWriter.close();
         ireader.close();
+
         directory.close();
 
     }

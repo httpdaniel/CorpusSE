@@ -32,9 +32,9 @@ public class TopicsParser {
                 while (line != null && !line.startsWith("</top>")) {
                     if (line.startsWith("<num>")) {
                     } else if (line.startsWith("<title>")) {
-                        content += line.substring(8);
+                        content += " " + line.substring(8);
                     } else {
-                        content += line;
+                        content += " " + line;
                     }
                     line = bufferedReader.readLine();
                 }
