@@ -1,3 +1,4 @@
+package parsers;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Document;
@@ -25,9 +26,9 @@ public class Fbis {
 	                title = document.select("ti").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
 	                
 	                Document doc = new Document();
-	                doc.add(new TextField("docnoo", docno, Field.Store.YES));
-	                doc.add(new TextField("headline", title, Field.Store.YES));
-	                doc.add(new TextField("text", text, Field.Store.YES));
+	                doc.add(new TextField("DocNo", docno, Field.Store.YES));
+	                doc.add(new TextField("Title", title, Field.Store.YES));
+	                doc.add(new TextField("Content", text, Field.Store.YES));
 	                parsedDocuments.add(doc);
 			}
 		}

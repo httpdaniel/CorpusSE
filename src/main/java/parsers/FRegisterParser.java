@@ -11,6 +11,7 @@ import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
 
@@ -28,8 +29,11 @@ public class FRegisterParser {
             for (File currentFile : currentFiles) {
                 org.jsoup.nodes.Document document = Jsoup.parse(currentFile, null);
                 Elements docs = document.select("DOC");
+
                 for (Element currentDoc : docs) {
-                    parsedDocs.add(createDocument(currentDoc.select("DOCNO").text(), currentDoc.select("TEXT").text(), currentDoc.select("DDCTITLE").text()));
+                    String text = Jsoup.clean(currentDoc.select("TEXT").text(), Whitelist.none());
+                   // System.out.print(text + "\n\n\n\n\n\n\n\n");
+                    parsedDocs.add(createDocument(currentDoc.select("DOCNO").text(), text, currentDoc.select("DDCTITLE").text()));
                 }
             }
 
@@ -40,8 +44,8 @@ public class FRegisterParser {
 
         // Create new Lucene document with passed in parameters
         Document document = new Document();
-        document.add(new TextField("DocNum", docNo, Field.Store.YES));
-        document.add(new TextField("Headline", headline, Field.Store.YES));
+        document.add(new TextField("DocNo", docNo, Field.Store.YES));
+        document.add(new TextField("Title", headline, Field.Store.YES));
         document.add(new TextField("Content", text, Field.Store.YES));
 
         // Return Lucene document

@@ -53,8 +53,8 @@ public class LATimesParser {
 
         // Create new Lucene document with passed in parameters
         Document document = new Document();
-        document.add(new TextField("DocNumber", id, Field.Store.YES));
-        document.add(new TextField("Headline", headline, Field.Store.YES));
+        document.add(new TextField("DocNo", id, Field.Store.YES));
+        document.add(new TextField("Title", headline, Field.Store.YES));
         document.add(new TextField("Content", content, Field.Store.YES));
 
         // Return Lucene document
