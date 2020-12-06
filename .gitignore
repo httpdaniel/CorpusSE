@@ -9,3 +9,7 @@ corpus/.DS_Store
 .classpath
 .gitattributes
 .project
+
+dependency-reduced-pom.xml
+
+index/
