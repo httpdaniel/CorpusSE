@@ -13,7 +13,7 @@ public class TopicsParser {
     public static ArrayList<String> getDocuments() throws IOException, ParseException {
         ArrayList<String> topicsList = new ArrayList<>();
         BufferedReader bufferedReader = null;
-        String fileName = "Corpus/topics";
+        String fileName = "corpus/topics";
         try {
             bufferedReader = new BufferedReader(new FileReader(fileName));
         } catch (Exception e) {

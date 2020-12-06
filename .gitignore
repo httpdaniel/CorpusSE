@@ -8,3 +8,14 @@ corpus/.DS_Store
 
 .classpath
 .gitattributes
+.project
+
+dependency-reduced-pom.xml
+
+index/
+
+.settings
+
+corpus/ParsedTopics.txt
+
+corpus/Results.txt
