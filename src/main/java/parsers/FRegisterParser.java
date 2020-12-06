@@ -4,11 +4,11 @@ import org.apache.lucene.document.Document;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexWriter;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
@@ -17,38 +17,34 @@ import org.jsoup.select.Elements;
 
 public class FRegisterParser {
 
-    public static ArrayList<Document> getDocuments() throws IOException {
+    public static void indexDocuments(IndexWriter iwriter) throws IOException {
+
         String fileName = "corpus/fr94";
-        ArrayList<Document> parsedDocs = new ArrayList<>();
 
+        File[] directories = new File(fileName).listFiles(File::isDirectory);
+        String id,content,headline;
+        assert directories != null;
+        for (File directory : directories) {
+            File[] files = directory.listFiles();
+            assert files != null;
+            for (File file : files) {
+                org.jsoup.nodes.Document d = Jsoup.parse(file, null, "");
+                Elements documents = d.select("DOC");
+                for (Element doc : documents) {
+                    headline = doc.select("PARENT").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
 
-        File file = new File(fileName);
-        File[] folders = file.listFiles(file12 -> file12.isDirectory());
-        for (File folder : folders) {
-            File[] currentFiles = folder.listFiles(file1 -> file1.isFile());
-            for (File currentFile : currentFiles) {
-                org.jsoup.nodes.Document document = Jsoup.parse(currentFile, null);
-                Elements docs = document.select("DOC");
+                    id = doc.select("DOCNO").text();
+                    content = doc.select("TEXT").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
+                    if(content.contains("\n"))
+                        content = content.replaceAll("\n","").trim();
 
-                for (Element currentDoc : docs) {
-                    String text = Jsoup.clean(currentDoc.select("TEXT").text(), Whitelist.none());
-                   // System.out.print(text + "\n\n\n\n\n\n\n\n");
-                    parsedDocs.add(createDocument(currentDoc.select("DOCNO").text(), text, currentDoc.select("DDCTITLE").text()));
+                    Document document = new Document();
+                    document.add(new TextField("DocNo", id, Field.Store.YES));
+                    document.add(new TextField("Content", content, Field.Store.YES));
+                    document.add(new TextField("Title", headline, Field.Store.YES));
+                    iwriter.addDocument(document);
                 }
             }
-
         }
-        return parsedDocs;
-    }
-    public static Document createDocument(String docNo, String headline, String text) {
-
-        // Create new Lucene document with passed in parameters
-        Document document = new Document();
-        document.add(new TextField("DocNo", docNo, Field.Store.YES));
-        document.add(new TextField("Title", headline, Field.Store.YES));
-        document.add(new TextField("Content", text, Field.Store.YES));
-
-        // Return Lucene document
-        return document;
     }
 }

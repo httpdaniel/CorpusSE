@@ -2,42 +2,49 @@ package parsers;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexWriter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.io.File;
-import java.util.ArrayList;
 
 public class Fbis {
 
-	public static ArrayList<Document> getDocuments() {
-		ArrayList<Document> parsedDocuments = new ArrayList<Document>();
-		String docno,text,title;
-		File[] file = new File("corpus/fbis/").listFiles();
+	public static void indexDocuments(IndexWriter iwriter) {
+
+		// Path for FBIS documents
+		String path = "corpus/fbis";
+
+		// For every file in the FBIS folder
+		File folder = new File(path);
+		File[] fileList = folder.listFiles();
+
 		int i = 0;
 		try {
-			for (File files : file) {
+			assert fileList != null;
+			for (File files : fileList) {
 				org.jsoup.nodes.Document d = Jsoup.parse(files, null, "");
-	            Elements documents = d.select("doc");
+	            Elements documents = d.select("DOC");
 
 	            for (Element document : documents) {
-	                docno = document.select("docno").text();
-	                text = document.select("text").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
-	                title = document.select("ti").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
-	                
-	                Document doc = new Document();
-	                doc.add(new TextField("DocNo", docno, Field.Store.YES));
-	                doc.add(new TextField("Title", title, Field.Store.YES));
-	                doc.add(new TextField("Content", text, Field.Store.YES));
-	                parsedDocuments.add(doc);
+					String id, headline, content;
+					id = document.select("DOCNO").text();
+					headline = document.select("TI").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
+					content = document.select("TEXT").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
+
+					Document doc = new Document();
+					doc.add(new TextField("DocNo", id, Field.Store.YES));
+					doc.add(new TextField("Title", headline, Field.Store.YES));
+					doc.add(new TextField("Content", content, Field.Store.YES));
+					iwriter.addDocument(doc);
+				}
 			}
 		}
-	}
+
 		catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Documents parsed: " + i);
 		}
-		return parsedDocuments;
 	}
 
 }
