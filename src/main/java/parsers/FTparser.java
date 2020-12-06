@@ -17,6 +17,17 @@ public class FTparser {
 		// Path for FinancialTimes documents
 		String path = "corpus/ft";
 
+		// Create skeleton for documents
+		String id, headline, content;
+		id = headline = content = "";
+		Document document = new Document();
+		Field idField = new TextField("DocNo", id, Field.Store.YES);
+		Field titleField = new TextField("Title", headline, Field.Store.YES);
+		Field contentField = new TextField("Content", content, Field.Store.YES);
+		document.add(idField);
+		document.add(titleField);
+		document.add(contentField);
+
 		File[] directories = new File(path).listFiles(File::isDirectory);
 
 		assert directories != null;
@@ -27,18 +38,16 @@ public class FTparser {
 				org.jsoup.nodes.Document d = Jsoup.parse(file, null, "");
 				Elements documents = d.select("DOC");
 
-				for (Element document : documents) {
-					String id, content, headline;
+				for (Element doc : documents) {
 
-					id = document.select("DOCNO").text();
-					headline = document.select("HEADLINE").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
-					content = document.select("TEXT").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
-
-					Document doc = new Document();
-					doc.add(new TextField("DocNo", id, Field.Store.YES));
-					doc.add(new TextField("Title", headline, Field.Store.YES));
-					doc.add(new TextField("Content", content, Field.Store.YES));
-					iwriter.addDocument(doc);
+					id = doc.select("DOCNO").text();
+					headline = doc.select("HEADLINE").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
+					content = doc.select("TEXT").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
+					// Create a Lucene document
+					idField.setStringValue(id);
+					titleField.setStringValue(headline);
+					contentField.setStringValue(content);
+					iwriter.addDocument(document);
 				}
 			}
 		}

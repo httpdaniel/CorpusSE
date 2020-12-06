@@ -11,7 +11,6 @@ import org.apache.lucene.index.IndexWriter;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
 
@@ -21,8 +20,18 @@ public class FRegisterParser {
 
         String fileName = "corpus/fr94";
 
+        // Create skeleton for documents
+        String id, headline, content;
+        id = headline = content = "";
+        Document document = new Document();
+        Field idField = new TextField("DocNo", id, Field.Store.YES);
+        Field titleField = new TextField("Title", headline, Field.Store.YES);
+        Field contentField = new TextField("Content", content, Field.Store.YES);
+        document.add(idField);
+        document.add(titleField);
+        document.add(contentField);
+
         File[] directories = new File(fileName).listFiles(File::isDirectory);
-        String id,content,headline;
         assert directories != null;
         for (File directory : directories) {
             File[] files = directory.listFiles();
@@ -31,17 +40,20 @@ public class FRegisterParser {
                 org.jsoup.nodes.Document d = Jsoup.parse(file, null, "");
                 Elements documents = d.select("DOC");
                 for (Element doc : documents) {
-                    headline = doc.select("PARENT").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
+                    headline = doc.select("PARENT").text();
 
                     id = doc.select("DOCNO").text();
-                    content = doc.select("TEXT").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
-                    if(content.contains("\n"))
-                        content = content.replaceAll("\n","").trim();
 
-                    Document document = new Document();
-                    document.add(new TextField("DocNo", id, Field.Store.YES));
-                    document.add(new TextField("Content", content, Field.Store.YES));
-                    document.add(new TextField("Title", headline, Field.Store.YES));
+                    content = doc.select("TEXT").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
+                    if(content.contains("\n")) {
+                        content = content.replaceAll("\n", "").trim();
+                    }
+
+                    // Create a Lucene document
+                    idField.setStringValue(id);
+                    titleField.setStringValue(headline);
+                    contentField.setStringValue(content);
+                    System.out.println(idField + " " + titleField);
                     iwriter.addDocument(document);
                 }
             }

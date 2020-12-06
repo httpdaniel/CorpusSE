@@ -51,7 +51,6 @@ public class LATimesParser {
                 idField.setStringValue(id);
                 titleField.setStringValue(headline);
                 contentField.setStringValue(content);
-
                 iwriter.addDocument(document);
             }
 
