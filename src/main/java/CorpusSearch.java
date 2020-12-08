@@ -13,6 +13,8 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.similarities.BM25Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+
+import analyzers.SelectAnalyzer;
 import parsers.TopicsParser;
 
 import java.io.BufferedWriter;
@@ -41,11 +43,22 @@ public class CorpusSearch {
         isearcher.setSimilarity(new BM25Similarity());
 
         // Set of stop words for engine to ignore
-        CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
+        //CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
 
         // Create custom analyzer
-        Analyzer analyzer = new CustomAnalyzer(stopwords);
+        //Analyzer analyzer = new CustomAnalyzer(stopwords);
 
+      //Select Analyzer
+    	/** 1: CustomAnalyzer
+    	 *  2: EnglishAnalyzer
+    	 *  3: StandarAnalyzer
+    	 *  4: KeywordAnalyzer
+    	 *  5: SimpleAnalyzer
+    	 *  6: StopAnalyzer
+    	 *  7: WhitespaceAnalyzer
+    	 */
+    	Analyzer analyzer = SelectAnalyzer.getAnalyzer(1);
+        
         // Booster to add weight to more important fields
         HashMap<String, Float> boost = new HashMap<>();
         boost.put("DocNo", 0.1f);
