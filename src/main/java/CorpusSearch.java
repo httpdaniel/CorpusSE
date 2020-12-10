@@ -11,10 +11,11 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.similarities.BM25Similarity;
+import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
-import analyzers.SelectAnalyzer;
+import analyzers.SelectAnalyzerSimilarity;
 import parsers.TopicsParser;
 
 import java.io.BufferedWriter;
@@ -36,11 +37,18 @@ public class CorpusSearch {
 
         // Open folder that contains search index
         Directory directory = FSDirectory.open(Paths.get(INDEX_DIRECTORY));
+        
+      //Select Similarity
+    	/** 1: BM25Similarity
+    	 *  2: ClassicSimilarity
+    	 *  3: LMDirichletSimilarity
+    	 */
+        Similarity sim = SelectAnalyzerSimilarity.getSimilarity(1);
 
         // Create objects to read and search across index
         DirectoryReader ireader = DirectoryReader.open(directory);
         IndexSearcher isearcher = new IndexSearcher(ireader);
-        isearcher.setSimilarity(new BM25Similarity());
+        isearcher.setSimilarity(sim);
 
         // Set of stop words for engine to ignore
         //CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
@@ -57,7 +65,7 @@ public class CorpusSearch {
     	 *  6: StopAnalyzer
     	 *  7: WhitespaceAnalyzer
     	 */
-    	Analyzer analyzer = SelectAnalyzer.getAnalyzer(1);
+    	Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(1);
         
         // Booster to add weight to more important fields
         HashMap<String, Float> boost = new HashMap<>();
