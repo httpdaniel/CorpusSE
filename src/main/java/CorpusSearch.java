@@ -48,7 +48,7 @@ public class CorpusSearch {
         // Create objects to read and search across index
         DirectoryReader ireader = DirectoryReader.open(directory);
         IndexSearcher isearcher = new IndexSearcher(ireader);
-        isearcher.setSimilarity(sim);
+        isearcher.setSimilarity(SelectAnalyzerSimilarity.getSimilarity(1));
 
         // Set of stop words for engine to ignore
         //CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
@@ -65,15 +65,15 @@ public class CorpusSearch {
     	 *  6: StopAnalyzer
     	 *  7: WhitespaceAnalyzer
     	 */
-    	Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(1);
+    	Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(2);
         
         // Booster to add weight to more important fields
-        HashMap<String, Float> boost = new HashMap<>();
-        boost.put("DocNo", 0.1f);
-        boost.put("Title", 0.65f);
-        boost.put("Content", 0.35f);
+//        HashMap<String, Float> boost = new HashMap<>();
+//        boost.put("DocNo", 0.1f);
+//        boost.put("Title", 0.65f);
+//        boost.put("Content", 0.35f);
 
-        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {"DocNo", "Title", "Content"}, analyzer, boost);
+        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {"DocNo", "Title", "Content"}, analyzer);
         queryParser.setAllowLeadingWildcard(true);
 
         // Get queries
@@ -93,7 +93,7 @@ public class CorpusSearch {
         BufferedWriter topicWriter = new BufferedWriter(new FileWriter("corpus/ParsedTopics.txt"));
         BufferedWriter resultWriter = new BufferedWriter(new FileWriter("corpus/Results.txt"));
 
-        int j = 1;
+        int j = 401;
         for(String topic: topics){
             topicWriter.write("New Parsed Topic ----------------------------- *");
             topicWriter.newLine();

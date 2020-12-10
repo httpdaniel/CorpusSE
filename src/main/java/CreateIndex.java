@@ -4,6 +4,7 @@ import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.index.ConcurrentMergeScheduler;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.search.similarities.BM25Similarity;
 import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -29,14 +30,13 @@ public class CreateIndex {
         //CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
 
     	//Select Analyzer
-    	Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(1);
+        Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(2);
     	//Select Similarity
     	/** 1: BM25Similarity
     	 *  2: ClassicSimilarity
     	 *  3: LMDirichletSimilarity
     	 */
-        Similarity sim = SelectAnalyzerSimilarity.getSimilarity(1);
-    
+
         // Create custom analyzer
         //Analyzer analyzer = new CustomAnalyzer(stopwords);
 
@@ -44,7 +44,9 @@ public class CreateIndex {
         Directory directory = FSDirectory.open(Paths.get(INDEX_DIRECTORY));
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
-        config.setSimilarity(sim);
+
+        //Similarity sim = SelectAnalyzerSimilarity.getSimilarity(1);
+        config.setSimilarity(SelectAnalyzerSimilarity.getSimilarity(1));
         config.setUseCompoundFile(false);
 
         // Create threads for indexing
