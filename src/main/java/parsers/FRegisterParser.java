@@ -4,11 +4,11 @@ import org.apache.lucene.document.Document;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexWriter;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -16,35 +16,47 @@ import org.jsoup.select.Elements;
 
 public class FRegisterParser {
 
-    public static ArrayList<Document> getDocuments() throws IOException {
+    public static void indexDocuments(IndexWriter iwriter) throws IOException {
+
         String fileName = "corpus/fr94";
-        ArrayList<Document> parsedDocs = new ArrayList<>();
 
+        // Create skeleton for documents
+        String id, headline, content;
+        id = headline = content = "";
+        Document document = new Document();
+        Field idField = new TextField("DocNo", id, Field.Store.YES);
+        Field titleField = new TextField("Title", headline, Field.Store.YES);
+        Field contentField = new TextField("Content", content, Field.Store.YES);
+        document.add(idField);
+        document.add(titleField);
+        document.add(contentField);
 
-        File file = new File(fileName);
-        File[] folders = file.listFiles(file12 -> file12.isDirectory());
-        for (File folder : folders) {
-            File[] currentFiles = folder.listFiles(file1 -> file1.isFile());
-            for (File currentFile : currentFiles) {
-                org.jsoup.nodes.Document document = Jsoup.parse(currentFile, null);
-                Elements docs = document.select("DOC");
-                for (Element currentDoc : docs) {
-                    parsedDocs.add(createDocument(currentDoc.select("DOCNO").text(), currentDoc.select("TEXT").text(), currentDoc.select("DDCTITLE").text()));
+        File[] directories = new File(fileName).listFiles(File::isDirectory);
+        assert directories != null;
+        for (File directory : directories) {
+            File[] files = directory.listFiles();
+            assert files != null;
+            for (File file : files) {
+                org.jsoup.nodes.Document d = Jsoup.parse(file, null, "");
+                Elements documents = d.select("DOC");
+                for (Element doc : documents) {
+                    headline = doc.select("PARENT").text();
+
+                    id = doc.select("DOCNO").text();
+
+                    content = doc.select("TEXT").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
+                    if(content.contains("\n")) {
+                        content = content.replaceAll("\n", "").trim();
+                    }
+
+                    // Create a Lucene document
+                    idField.setStringValue(id);
+                    titleField.setStringValue(headline);
+                    contentField.setStringValue(content);
+                    System.out.println(idField + " " + titleField);
+                    iwriter.addDocument(document);
                 }
             }
-
         }
-        return parsedDocs;
-    }
-    public static Document createDocument(String docNo, String headline, String text) {
-
-        // Create new Lucene document with passed in parameters
-        Document document = new Document();
-        document.add(new TextField("DocNum", docNo, Field.Store.YES));
-        document.add(new TextField("Headline", headline, Field.Store.YES));
-        document.add(new TextField("Content", text, Field.Store.YES));
-
-        // Return Lucene document
-        return document;
     }
 }

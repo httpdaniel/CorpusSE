@@ -1,19 +1,21 @@
 package parsers;
-import org.apache.lucene.document.TextField;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexWriter;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import java.io.File;
+import java.io.IOException;
 
-public class Fbis {
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.document.Document;
 
-	public static void indexDocuments(IndexWriter iwriter) {
+import org.jsoup.Jsoup;
+import org.jsoup.select.Elements;
+import org.jsoup.nodes.Element;
 
-		// Path for FBIS documents
-		String path = "corpus/fbis";
+public class FTparser {
+	public static void indexDocuments(IndexWriter iwriter) throws IOException {
+
+		// Path for FinancialTimes documents
+		String path = "corpus/ft";
 
 		// Create skeleton for documents
 		String id, headline, content;
@@ -26,22 +28,21 @@ public class Fbis {
 		document.add(titleField);
 		document.add(contentField);
 
-		// For every file in the FBIS folder
-		File folder = new File(path);
-		File[] fileList = folder.listFiles();
+		File[] directories = new File(path).listFiles(File::isDirectory);
 
-		int i = 0;
-		try {
-			assert fileList != null;
-			for (File files : fileList) {
-				org.jsoup.nodes.Document d = Jsoup.parse(files, null, "");
-	            Elements documents = d.select("DOC");
+		assert directories != null;
+		for (File folder : directories) {
+			File[] files = folder.listFiles();
+			assert files != null;
+			for (File file : files) {
+				org.jsoup.nodes.Document d = Jsoup.parse(file, null, "");
+				Elements documents = d.select("DOC");
 
-	            for (Element doc : documents) {
+				for (Element doc : documents) {
+
 					id = doc.select("DOCNO").text();
-					headline = doc.select("TI").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
+					headline = doc.select("HEADLINE").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
 					content = doc.select("TEXT").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
-
 					// Create a Lucene document
 					idField.setStringValue(id);
 					titleField.setStringValue(headline);
@@ -49,11 +50,6 @@ public class Fbis {
 					iwriter.addDocument(document);
 				}
 			}
-		}
-
-		catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Documents parsed: " + i);
 		}
 	}
 
