@@ -1,3 +1,4 @@
+package analyzers;
 import org.apache.lucene.analysis.*;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.en.EnglishMinimalStemFilter;
