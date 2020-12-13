@@ -35,7 +35,7 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
         filter = new PorterStemFilter(filter);
         filter = new StopFilter(filter, stopwords);
         filter = new EnglishMinimalStemFilter(filter);
- 	    //filter = new NGramTokenFilter(filter, ngrams);
+ 	    filter = new NGramTokenFilter(filter, 1);
 
         return new TokenStreamComponents(tokenizer, filter);
     }
