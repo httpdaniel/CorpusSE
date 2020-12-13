@@ -11,6 +11,7 @@ import org.apache.lucene.store.FSDirectory;
 
 import analyzers.SelectAnalyzerSimilarity;
 import parsers.*;
+import analyzers.CustomAnalyzer;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -27,10 +28,10 @@ public class CreateIndex {
     public static void main(String[] args) throws IOException, InterruptedException {
 
         // Set of stop words for engine to ignore
-        //CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
+        CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
 
     	//Select Analyzer
-        Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(2);
+        //Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(2);
     	//Select Similarity
     	/** 1: BM25Similarity
     	 *  2: ClassicSimilarity
@@ -38,7 +39,7 @@ public class CreateIndex {
     	 */
 
         // Create custom analyzer
-        //Analyzer analyzer = new CustomAnalyzer(stopwords);
+        Analyzer analyzer = new CustomAnalyzer(stopwords, 3);
 
         // Set up IndexWriter config
         Directory directory = FSDirectory.open(Paths.get(INDEX_DIRECTORY));

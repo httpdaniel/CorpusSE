@@ -15,6 +15,7 @@ import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
+import analyzers.CustomAnalyzer;
 import analyzers.SelectAnalyzerSimilarity;
 import parsers.TopicsParser;
 
@@ -48,13 +49,13 @@ public class CorpusSearch {
         // Create objects to read and search across index
         DirectoryReader ireader = DirectoryReader.open(directory);
         IndexSearcher isearcher = new IndexSearcher(ireader);
-        isearcher.setSimilarity(SelectAnalyzerSimilarity.getSimilarity(1));
+        isearcher.setSimilarity(sim);
 
         // Set of stop words for engine to ignore
-        //CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
+        CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
 
         // Create custom analyzer
-        //Analyzer analyzer = new CustomAnalyzer(stopwords);
+        Analyzer analyzer = new CustomAnalyzer(stopwords, 3);
 
       //Select Analyzer
     	/** 1: CustomAnalyzer
@@ -65,13 +66,13 @@ public class CorpusSearch {
     	 *  6: StopAnalyzer
     	 *  7: WhitespaceAnalyzer
     	 */
-    	Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(2);
+    	//Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(2);
         
         // Booster to add weight to more important fields
-//        HashMap<String, Float> boost = new HashMap<>();
-//        boost.put("DocNo", 0.1f);
-//        boost.put("Title", 0.65f);
-//        boost.put("Content", 0.35f);
+        HashMap<String, Float> boost = new HashMap<>();
+        boost.put("DocNo", 0.01f);
+        boost.put("Title", 0.15f);
+        boost.put("Content", 0.8f);
 
         MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {"DocNo", "Title", "Content"}, analyzer);
         queryParser.setAllowLeadingWildcard(true);
@@ -89,6 +90,7 @@ public class CorpusSearch {
 
     }
     public static void search(ArrayList<String> topics, QueryParser parser, IndexSearcher isearcher) throws IOException, ParseException {
+    	
 
         BufferedWriter topicWriter = new BufferedWriter(new FileWriter("corpus/ParsedTopics.txt"));
         BufferedWriter resultWriter = new BufferedWriter(new FileWriter("corpus/Results.txt"));
