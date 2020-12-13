@@ -20,7 +20,7 @@ public class SelectAnalyzerSimilarity {
 		CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
 		
 		if (analyzerNumber == 1) {
-			analyzer = new CustomAnalyzer(stopwords);
+			analyzer = new CustomAnalyzer(stopwords, 4);
 		} else if(analyzerNumber == 2) {
 	    	 analyzer = new EnglishAnalyzer(EnglishAnalyzer.getDefaultStopSet());
 		} else if(analyzerNumber == 3) {

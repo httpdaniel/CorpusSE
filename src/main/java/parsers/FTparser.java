@@ -27,7 +27,7 @@ public class FTparser {
 		document.add(idField);
 		document.add(titleField);
 		document.add(contentField);
-
+		
 		File[] directories = new File(path).listFiles(File::isDirectory);
 
 		assert directories != null;

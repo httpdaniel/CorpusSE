@@ -48,6 +48,7 @@ public class CorpusSearch {
         // Create objects to read and search across index
         DirectoryReader ireader = DirectoryReader.open(directory);
         IndexSearcher isearcher = new IndexSearcher(ireader);
+        System.out.println(isearcher.doc(10));
         isearcher.setSimilarity(sim);
 
         // Set of stop words for engine to ignore
@@ -82,7 +83,7 @@ public class CorpusSearch {
 
         // Start searching
         System.out.println("Index search is starting now");
-        search(queries, queryParser, isearcher);
+       // search(queries, queryParser, isearcher);
 
         ireader.close();
         directory.close();

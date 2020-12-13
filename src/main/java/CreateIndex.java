@@ -65,6 +65,7 @@ public class CreateIndex {
         System.out.print("Indexing documents...\n");
         for (int i = 0; i < parseTasks; i++) {
             es.submit(new ParseTask(parsers[i], latch, iwriter));
+            
         }
 
         latch.await();
