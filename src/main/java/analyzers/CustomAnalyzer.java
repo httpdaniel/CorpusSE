@@ -45,7 +45,7 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
        // filter = new PorterStemFilter(filter);
        // filter = new StopFilter(filter, stopwords);
         //filter = new EnglishMinimalStemFilter(filter);
- 	    //filter = new NGramTokenFilter(filter, ngrams);
+ 	    //
  	    
  	    final Tokenizer source = new StandardTokenizer();
  	    TokenStream filter = new EnglishPossessiveFilter(source);
@@ -54,7 +54,7 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
  	    if(!stemExclusionSet.isEmpty())
  	    	filter = new SetKeywordMarkerFilter(filter, stemExclusionSet);
  	   filter = new PorterStemFilter(filter);
- 	    
+ 	  filter = new NGramTokenFilter(filter, ngrams);
  	  
  	   
         return new TokenStreamComponents(source, filter);
