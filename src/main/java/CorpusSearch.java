@@ -55,7 +55,7 @@ public class CorpusSearch {
         CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
 
         // Create custom analyzer
-        Analyzer analyzer = new CustomAnalyzer(stopwords, 3);
+        Analyzer analyzer = new CustomAnalyzer(stopwords, 5);
 
       //Select Analyzer
     	/** 1: CustomAnalyzer
