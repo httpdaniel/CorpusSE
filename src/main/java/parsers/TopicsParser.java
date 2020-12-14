@@ -33,7 +33,12 @@ public class TopicsParser {
                     if (line.startsWith("<num>")) {
                     } else if (line.startsWith("<title>")) {
                         content += " " + line.substring(8);
-                    } else {
+                    }
+                    else if(line.startsWith("<narr>") || line.startsWith("<desc>")){
+
+                    }
+
+                        else {
                         content += " " + line;
                     }
                     line = bufferedReader.readLine();
