@@ -43,12 +43,12 @@ public class CorpusSearch {
     	 *  2: ClassicSimilarity
     	 *  3: LMDirichletSimilarity
     	 */
-        Similarity sim = SelectAnalyzerSimilarity.getSimilarity(1);
+
 
         // Create objects to read and search across index
         DirectoryReader ireader = DirectoryReader.open(directory);
         IndexSearcher isearcher = new IndexSearcher(ireader);
-        isearcher.setSimilarity(SelectAnalyzerSimilarity.getSimilarity(1));
+    isearcher.setSimilarity(SelectAnalyzerSimilarity.getSimilarity(8));
 
         // Set of stop words for engine to ignore
         //CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
@@ -65,15 +65,15 @@ public class CorpusSearch {
     	 *  6: StopAnalyzer
     	 *  7: WhitespaceAnalyzer
     	 */
-    	Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(2);
+    	Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(8);
         
-        // Booster to add weight to more important fields
-//        HashMap<String, Float> boost = new HashMap<>();
-//        boost.put("DocNo", 0.1f);
-//        boost.put("Title", 0.65f);
-//        boost.put("Content", 0.35f);
+//    	Booster to add weight to more important fields
+        HashMap<String, Float> boost = new HashMap<>();
+        boost.put("DocNo", 0.01f);
+        boost.put("Title", 0.15f);
+        boost.put("Content", 0.8f);
 
-        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {"DocNo", "Title", "Content"}, analyzer);
+        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {"DocNo", "Title", "Content"}, analyzer, boost);
         queryParser.setAllowLeadingWildcard(true);
 
         // Get queries
