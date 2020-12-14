@@ -31,7 +31,7 @@ public class CreateIndex {
         CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
 
     	//Select Analyzer
-        //Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(2);
+        Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(2);
     	//Select Similarity
     	/** 1: BM25Similarity
     	 *  2: ClassicSimilarity
@@ -39,7 +39,7 @@ public class CreateIndex {
     	 */
 
         // Create custom analyzer
-        Analyzer analyzer = new CustomAnalyzer(stopwords, 3);
+        //Analyzer analyzer = new CustomAnalyzer(stopwords, 3);
 
         // Set up IndexWriter config
         Directory directory = FSDirectory.open(Paths.get(INDEX_DIRECTORY));
