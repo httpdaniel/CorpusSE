@@ -39,7 +39,7 @@ public class CreateIndex {
     	 */
 
         // Create custom analyzer
-        Analyzer analyzer = new CustomAnalyzer(stopwords, 3);
+        Analyzer analyzer = new CustomAnalyzer(stopwords, 5);
 
         // Set up IndexWriter config
         Directory directory = FSDirectory.open(Paths.get(INDEX_DIRECTORY));
