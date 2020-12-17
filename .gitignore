@@ -21,3 +21,19 @@ corpus/ParsedTopics.txt
 corpus/Results.txt
 
 
+corpus/dict
+
+
+corpus/prolog
+
+corpus/sensemap
+corpus/trec_eval
+
+*.class
+corpus/wn3.1.dict.tar
+
+corpus/WNprolog-3.0.tar
+
+corpus/WNsnsmap-3.0.tar
+
+CorpusSE.iml

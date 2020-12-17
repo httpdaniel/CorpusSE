@@ -26,11 +26,13 @@ public class CreateIndex {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
+        Integer analyzerNumber = 5;
+        Integer similarityNumber = 5;
         // Set of stop words for engine to ignore
         //CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
 
     	//Select Analyzer
-        Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(2);
+        Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(analyzerNumber);
     	//Select Similarity
     	/** 1: BM25Similarity
     	 *  2: ClassicSimilarity
@@ -46,7 +48,7 @@ public class CreateIndex {
         config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
 
         //Similarity sim = SelectAnalyzerSimilarity.getSimilarity(1);
-        config.setSimilarity(SelectAnalyzerSimilarity.getSimilarity(1));
+        config.setSimilarity(SelectAnalyzerSimilarity.getSimilarity(similarityNumber));
         config.setUseCompoundFile(false);
 
         // Create threads for indexing

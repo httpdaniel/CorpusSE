@@ -35,6 +35,10 @@ public class CorpusSearch {
 
     public static void main(String[] args) throws IOException, java.text.ParseException, ParseException {
 
+        Integer analyzerNumber = 5;
+        Integer similarityNumber = 5;
+
+
         // Open folder that contains search index
         Directory directory = FSDirectory.open(Paths.get(INDEX_DIRECTORY));
         
@@ -48,7 +52,7 @@ public class CorpusSearch {
         // Create objects to read and search across index
         DirectoryReader ireader = DirectoryReader.open(directory);
         IndexSearcher isearcher = new IndexSearcher(ireader);
-    isearcher.setSimilarity(SelectAnalyzerSimilarity.getSimilarity(8));
+        isearcher.setSimilarity(SelectAnalyzerSimilarity.getSimilarity(similarityNumber));
 
         // Set of stop words for engine to ignore
         //CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
@@ -65,7 +69,7 @@ public class CorpusSearch {
     	 *  6: StopAnalyzer
     	 *  7: WhitespaceAnalyzer
     	 */
-    	Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(8);
+    	Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(analyzerNumber);
         
 //    	Booster to add weight to more important fields
         HashMap<String, Float> boost = new HashMap<>();

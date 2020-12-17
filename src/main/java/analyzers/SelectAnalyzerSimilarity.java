@@ -27,16 +27,10 @@ public class SelectAnalyzerSimilarity {
 	    	 analyzer = new EnglishAnalyzer(stopwords);
 		} else if(analyzerNumber == 3) {
 	         analyzer = new StandardAnalyzer();
-		} else if(analyzerNumber == 4) {
-	         analyzer = new KeywordAnalyzer();
-		} else if(analyzerNumber == 5) {
+		}  else if(analyzerNumber == 4) {
 	         analyzer = new SimpleAnalyzer();
-		}  else if(analyzerNumber == 6) {
-	         analyzer = new StopAnalyzer(stopwords);
-		} else if(analyzerNumber == 7) {
-	         analyzer = new WhitespaceAnalyzer();
 		}
-		else if(analyzerNumber == 8){
+		else if(analyzerNumber == 5){
 			analyzer = new CustomAnalyzer2();
 		}
 		return analyzer;
@@ -60,12 +54,6 @@ public class SelectAnalyzerSimilarity {
 		}
 		else if(similarityNumber == 6){
 			sim = new LMJelinekMercerSimilarity(0.72f);
-		}
-		else if(similarityNumber == 7){
-			sim = new LMDirichletSimilarity();
-		}
-		else if(similarityNumber == 8){
-			sim = new AxiomaticF2EXP();
 		}
 		return sim;
 	}
