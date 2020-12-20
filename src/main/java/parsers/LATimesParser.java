@@ -15,6 +15,7 @@ import org.jsoup.select.Elements;
 public class LATimesParser {
 
     public static void indexDocuments(IndexWriter iwriter) throws IOException {
+        System.out.println("Started LA Times  Parser ...");
 
         // Path for LATimes documents
         String path = "corpus/latimes";

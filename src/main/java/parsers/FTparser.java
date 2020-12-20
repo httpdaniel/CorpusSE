@@ -13,6 +13,7 @@ import org.jsoup.nodes.Element;
 
 public class FTparser {
 	public static void indexDocuments(IndexWriter iwriter) throws IOException {
+		System.out.println("Started Financial Times  Parser ...");
 
 		// Path for FinancialTimes documents
 		String path = "corpus/ft";

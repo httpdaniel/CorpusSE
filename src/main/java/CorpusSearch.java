@@ -35,6 +35,9 @@ public class CorpusSearch {
 
     public static void main(String[] args) throws IOException, java.text.ParseException, ParseException {
 
+        long programStart = System.currentTimeMillis();
+
+
         Integer analyzerNumber = 5;
         Integer similarityNumber = 5;
 
@@ -91,6 +94,9 @@ public class CorpusSearch {
         ireader.close();
         directory.close();
 
+        long programEnd = System.currentTimeMillis();
+        System.out.println("The Search took : " + (programEnd - programStart)/1000f + "s to Execute");
+
     }
     public static void search(ArrayList<String> topics, QueryParser parser, IndexSearcher isearcher) throws IOException, ParseException {
 
@@ -113,7 +119,7 @@ public class CorpusSearch {
 
             for (int i = 0; i < hits.length; i++) {
                 Document hitDoc = isearcher.doc(hits[i].doc);
-                System.out.print(j + " Q0 " + hitDoc.get("DocNo") + " " + (i + 1) + " " + hits[i].score + " Standard" + "\n");
+               // System.out.print(j + " Q0 " + hitDoc.get("DocNo") + " " + (i + 1) + " " + hits[i].score + " Standard" + "\n");
                 resultWriter.write(j + " Q0 " + hitDoc.get("DocNo") + " " + (i + 1) + " " + hits[i].score + " Standard" + "\n");
             }
             j++;

@@ -11,7 +11,7 @@ import java.io.File;
 public class Fbis {
 
 	public static void indexDocuments(IndexWriter iwriter) {
-
+		System.out.println("Started FBIS Index");
 		// Path for FBIS documents
 		String path = "corpus/fbis";
 

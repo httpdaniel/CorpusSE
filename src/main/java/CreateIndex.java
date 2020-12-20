@@ -25,6 +25,7 @@ public class CreateIndex {
     private static final String INDEX_DIRECTORY = "index";
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        long programStart = System.currentTimeMillis();
 
         Integer analyzerNumber = 5;
         Integer similarityNumber = 5;
@@ -52,6 +53,7 @@ public class CreateIndex {
         config.setUseCompoundFile(false);
 
         // Create threads for indexing
+        System.out.println("Starting Concurrent Threads.....");
         ConcurrentMergeScheduler cms = new ConcurrentMergeScheduler();
         cms.setMaxMergesAndThreads(4, 4);
         config.setMergeScheduler(cms);
@@ -76,6 +78,9 @@ public class CreateIndex {
 
         iwriter.close();
         directory.close();
+
+        long programEnd = System.currentTimeMillis();
+        System.out.println("The Indexing took : " + (programEnd - programStart)/1000f + "s to Execute");
 
     }
 

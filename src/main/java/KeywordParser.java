@@ -3,6 +3,12 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ *
+ * This class is used for Parsing Keywords from the Topics files Title Tag
+ * It uses a simple Buffer Reader and a For Loop to do the parsing.
+ * It makes use of some regex at the end to save words to a file to be easily readible
+ */
 public class KeywordParser {
     public static void main(String Args[]) throws IOException {
         ArrayList<String> topicsList = new ArrayList<>();
@@ -41,7 +47,7 @@ public class KeywordParser {
         Pattern pattern = Pattern.compile(regex);
         //Retrieving the matcher object
         Matcher matcher = pattern.matcher(keywords.trim());
-        //Replacing all space characters with single space
+        //Replacing all space characters with comma
         keywords = matcher.replaceAll(",");
         bufferedWriter.write(keywords);
         bufferedReader.close();

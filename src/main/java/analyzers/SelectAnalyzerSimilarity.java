@@ -12,6 +12,9 @@ import org.apache.lucene.search.similarities.*;
 
 import java.util.Arrays;
 
+/**
+ * This Class Handles the different Similarities and Analyzers Tried
+ */
 public class SelectAnalyzerSimilarity {
 	
 	public static Analyzer getAnalyzer(int analyzerNumber) {
