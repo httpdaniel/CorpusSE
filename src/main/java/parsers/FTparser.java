@@ -11,6 +11,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
 
+//This class parses the financial times articles into lucene docs using jsoup, an xml parser.
+
 public class FTparser {
 	public static void indexDocuments(IndexWriter iwriter) throws IOException {
 		System.out.println("Started Financial Times  Parser ...");
