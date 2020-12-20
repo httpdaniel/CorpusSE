@@ -38,6 +38,7 @@ public class Fbis {
 	            Elements documents = d.select("DOC");
 
 	            for (Element doc : documents) {
+			    		//Select the Document number, title and the content
 					id = doc.select("DOCNO").text();
 					headline = doc.select("TI").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
 					content = doc.select("TEXT").text().replaceAll("[^a-zA-Z ]", "".toLowerCase());
