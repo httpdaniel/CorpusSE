@@ -29,16 +29,19 @@ public class FTparser {
 		document.add(titleField);
 		document.add(contentField);
 
+		//Get the directories with the documents
 		File[] directories = new File(path).listFiles(File::isDirectory);
 
 		assert directories != null;
+		//iterate through each directory
 		for (File folder : directories) {
 			File[] files = folder.listFiles();
 			assert files != null;
+			//iterate through each file
 			for (File file : files) {
 				org.jsoup.nodes.Document d = Jsoup.parse(file, null, "");
 				Elements documents = d.select("DOC");
-
+				//Get the element from each doc and convert to lucene doc
 				for (Element doc : documents) {
 
 					id = doc.select("DOCNO").text();
