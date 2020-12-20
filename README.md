@@ -28,4 +28,22 @@ $ java -cp target/CorpusSE-1.0-SNAPSHOT.jar CreateIndex
 ``` sh
 $ java -cp target/CorpusSE-1.0-SNAPSHOT.jar CorpusSearch
 ```
+The results will be outputted to a file "Results.txt" in the corpus folder
 
+## Evaluating the results
+
+This step requires the installation of trec eval
+
+``` sh
+$ cd trec_eval-9.0.7
+
+$ make
+
+$ ./trec_eval ../qrels.assignment2.part1 ../Results.txt
+```
+
+## To display only Mean Average Precision & Recall
+
+``` sh
+$ ./trec_eval -m map -m recall ../qrels.assignment2.part1 ../Results.txt
+```
