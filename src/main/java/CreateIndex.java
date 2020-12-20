@@ -25,12 +25,15 @@ public class CreateIndex {
     private static final String INDEX_DIRECTORY = "index";
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        long programStart = System.currentTimeMillis();
 
+        Integer analyzerNumber = 5;
+        Integer similarityNumber = 5;
         // Set of stop words for engine to ignore
         //CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
 
     	//Select Analyzer
-        Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(2);
+        Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(analyzerNumber);
     	//Select Similarity
     	/** 1: BM25Similarity
     	 *  2: ClassicSimilarity
@@ -46,10 +49,11 @@ public class CreateIndex {
         config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
 
         //Similarity sim = SelectAnalyzerSimilarity.getSimilarity(1);
-        config.setSimilarity(SelectAnalyzerSimilarity.getSimilarity(1));
+        config.setSimilarity(SelectAnalyzerSimilarity.getSimilarity(similarityNumber));
         config.setUseCompoundFile(false);
 
         // Create threads for indexing
+        System.out.println("Starting Concurrent Threads.....");
         ConcurrentMergeScheduler cms = new ConcurrentMergeScheduler();
         cms.setMaxMergesAndThreads(4, 4);
         config.setMergeScheduler(cms);
@@ -74,6 +78,9 @@ public class CreateIndex {
 
         iwriter.close();
         directory.close();
+
+        long programEnd = System.currentTimeMillis();
+        System.out.println("The Indexing took : " + (programEnd - programStart)/1000f + "s to Execute");
 
     }
 

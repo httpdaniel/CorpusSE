@@ -14,17 +14,17 @@ public class TopicsParser {
         ArrayList<String> topicsList = new ArrayList<>();
         BufferedReader bufferedReader = null;
         String fileName = "corpus/topics";
-        try {
-            bufferedReader = new BufferedReader(new FileReader(fileName));
-        } catch (Exception e) {
-            System.out.println("The path to the Query File  maybe wrong, please check again.");
-            System.exit(0);
-        }
-        int j = 1;
+            try {
+                bufferedReader = new BufferedReader(new FileReader(fileName));
+            } catch (Exception e) {
+                System.out.println("The path to the Query File  maybe wrong, please check again.");
+                System.exit(0);
+            }
+            int j = 1;
 
-        String line = bufferedReader.readLine();
+            String line = bufferedReader.readLine();
 
-        while (line != null) {
+            while (line != null) {
             if (line.startsWith("<top>")) {
                 line = bufferedReader.readLine();
                 String content = "";
@@ -33,7 +33,12 @@ public class TopicsParser {
                     if (line.startsWith("<num>")) {
                     } else if (line.startsWith("<title>")) {
                         content += " " + line.substring(8);
-                    } else {
+                    }
+                    else if(line.startsWith("<narr>") || line.startsWith("<desc>")){
+
+                    }
+
+                        else {
                         content += " " + line;
                     }
                     line = bufferedReader.readLine();

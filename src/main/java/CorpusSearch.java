@@ -35,6 +35,13 @@ public class CorpusSearch {
 
     public static void main(String[] args) throws IOException, java.text.ParseException, ParseException {
 
+        long programStart = System.currentTimeMillis();
+
+
+        Integer analyzerNumber = 5;
+        Integer similarityNumber = 5;
+
+
         // Open folder that contains search index
         Directory directory = FSDirectory.open(Paths.get(INDEX_DIRECTORY));
         
@@ -43,12 +50,12 @@ public class CorpusSearch {
     	 *  2: ClassicSimilarity
     	 *  3: LMDirichletSimilarity
     	 */
-        Similarity sim = SelectAnalyzerSimilarity.getSimilarity(1);
+
 
         // Create objects to read and search across index
         DirectoryReader ireader = DirectoryReader.open(directory);
         IndexSearcher isearcher = new IndexSearcher(ireader);
-        isearcher.setSimilarity(SelectAnalyzerSimilarity.getSimilarity(1));
+        isearcher.setSimilarity(SelectAnalyzerSimilarity.getSimilarity(similarityNumber));
 
         // Set of stop words for engine to ignore
         //CharArraySet stopwords = CharArraySet.copy(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
@@ -65,15 +72,15 @@ public class CorpusSearch {
     	 *  6: StopAnalyzer
     	 *  7: WhitespaceAnalyzer
     	 */
-    	Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(2);
+    	Analyzer analyzer = SelectAnalyzerSimilarity.getAnalyzer(analyzerNumber);
         
-        // Booster to add weight to more important fields
-//        HashMap<String, Float> boost = new HashMap<>();
-//        boost.put("DocNo", 0.1f);
-//        boost.put("Title", 0.65f);
-//        boost.put("Content", 0.35f);
+//    	Booster to add weight to more important fields
+        HashMap<String, Float> boost = new HashMap<>();
+        boost.put("DocNo", 0.01f);
+        boost.put("Title", 0.15f);
+        boost.put("Content", 0.8f);
 
-        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {"DocNo", "Title", "Content"}, analyzer);
+        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {"DocNo", "Title", "Content"}, analyzer, boost);
         queryParser.setAllowLeadingWildcard(true);
 
         // Get queries
@@ -86,6 +93,9 @@ public class CorpusSearch {
 
         ireader.close();
         directory.close();
+
+        long programEnd = System.currentTimeMillis();
+        System.out.println("The Search took : " + (programEnd - programStart)/1000f + "s to Execute");
 
     }
     public static void search(ArrayList<String> topics, QueryParser parser, IndexSearcher isearcher) throws IOException, ParseException {
@@ -109,7 +119,7 @@ public class CorpusSearch {
 
             for (int i = 0; i < hits.length; i++) {
                 Document hitDoc = isearcher.doc(hits[i].doc);
-                System.out.print(j + " Q0 " + hitDoc.get("DocNo") + " " + (i + 1) + " " + hits[i].score + " Standard" + "\n");
+               // System.out.print(j + " Q0 " + hitDoc.get("DocNo") + " " + (i + 1) + " " + hits[i].score + " Standard" + "\n");
                 resultWriter.write(j + " Q0 " + hitDoc.get("DocNo") + " " + (i + 1) + " " + hits[i].score + " Standard" + "\n");
             }
             j++;

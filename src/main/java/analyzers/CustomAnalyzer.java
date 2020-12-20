@@ -6,6 +6,8 @@ import org.apache.lucene.analysis.en.PorterStemFilter;
 
 // https://www.baeldung.com/lucene-analyzers
 
+// Preliminary Custom analyzer without English Possessive Filter
+
 public class CustomAnalyzer extends StopwordAnalyzerBase {
 
     public CustomAnalyzer(CharArraySet stopwords) {
