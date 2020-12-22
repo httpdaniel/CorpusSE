@@ -32,19 +32,13 @@ The results will be outputted to a file "Results.txt" in the corpus folder
 
 ## Evaluating the results
 
-This step requires the installation of trec eval
-
 ``` sh
-$ cd trec_eval-9.0.7
-
-$ make
-
-$ ./trec_eval ../qrels.assignment2.part1 ../Results.txt
+$ cd corpus
+$ ./trec_eval-9.0.7/trec_eval qrels.assignment2.part1 Results.txt
 ```
 
 ## To display only Mean Average Precision & Recall
 
 ``` sh
-$ cd CorpusSE/corpus
-$ ./trec_eval-9.0.7/trec_eval qrels.assignment2.part1 Results.txt
+$ ./trec_eval-9.0.7/trec_eval -m qrels.assignment2.part1 Results.txt
 ```
